@@ -1,0 +1,55 @@
+<form 
+    name="custom_newsletter"
+    id="custom_newsletter" 
+    data-hasrequired="<?php echo __('* Required Fields') ?>" 
+    data-mage-init='{"validation":{}}'>
+
+    <fieldset class="fieldset">
+            <div class="field email required">
+                <label class="label" for="email"><span><?php  echo __('Email Address') ?></span></label>
+                <div class="control">
+                    <input name="email" id="email" title="<?php echo __('Email Address') ?>" placeholder="Enter Email Address" class="input-text" type="email" data-validate="{required:true, 'validate-email':true}"/>
+                </div>
+            </div>                        
+    </fieldset>
+    
+    <div class="actions-toolbar">
+        <div class="primary">
+            <input type="hidden" name="hideit" id="hideit" value="" />
+            <button type="submit" title="<?php echo __('Submit') ?>" class="action submit primary">
+                <span><?php echo __('Submit') ?></span>
+            </button>
+        </div>
+    </div>
+</form>
+
+<script type="text/javascript">
+require([
+    "jquery",
+    "mage/mage"
+],function($) {
+    $(document).ready(function() {
+
+        var dataForm = $('#custom_newsletter');
+        dataForm.mage('validation', {});
+         
+        $(document).on('click','.submit',function() {
+             
+        if (dataForm.valid()){
+            event.preventDefault();
+            var param = dataForm.serialize();
+                $.ajax({
+                    showLoader: true,
+                    url: "<?php echo $block->getBaseUrl().'customnewsletter/index/post/';?>",
+                    data: param,
+                    type: "POST"
+                }).done(function (data) {
+                    document.getElementById("custom_newsletter").reset();
+                    alert(data.message);
+                    return true;
+                });
+            }
+        });
+    });
+});
+</script>
